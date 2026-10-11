@@ -3,7 +3,6 @@ import {
   InvokeModelCommand
 } from '@aws-sdk/client-bedrock-runtime';
 import type { AnalysisResult } from '../types';
-import { getFallbackResult } from '../utils/fallback';
 
 const region = process.env.AWS_REGION || 'us-east-1';
 const modelId = process.env.BEDROCK_MODEL_ID || 'anthropic.claude-3-haiku-20240307-v1:0';
@@ -56,34 +55,28 @@ Respond ONLY with valid JSON in this exact structure:
     ]
   };
 
-  try {
-    const command = new InvokeModelCommand({
-      modelId,
-      contentType: 'application/json',
-      accept: 'application/json',
-      body: JSON.stringify(payload)
-    });
+  const command = new InvokeModelCommand({
+    modelId,
+    contentType: 'application/json',
+    accept: 'application/json',
+    body: JSON.stringify(payload)
+  });
 
-    const response = await bedrockClient.send(command);
-    const responseBody = JSON.parse(new TextDecoder().decode(response.body));
+  const response = await bedrockClient.send(command);
+  const responseBody = JSON.parse(new TextDecoder().decode(response.body));
 
-    const contentText = responseBody.content?.[0]?.text || '';
-    // Extract JSON substring if formatted in markdown code block
-    const jsonMatch = contentText.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
-      throw new Error('No JSON object found in Bedrock response');
-    }
-
-    const parsed = JSON.parse(jsonMatch[0]) as AnalysisResult;
-    return {
-      item: parsed.item || 'Identified Item',
-      category: parsed.category || 'Waste',
-      confidence: typeof parsed.confidence === 'number' ? parsed.confidence : 0.9,
-      recommendedAction: parsed.recommendedAction || 'Recycle',
-      actionId: parsed.actionId || 'bottle'
-    };
-  } catch (error) {
-    console.warn('Bedrock model invocation failed or timed out. Falling back to local intelligence:', error);
-    return getFallbackResult(filename);
+  const contentText = responseBody.content?.[0]?.text || '';
+  const jsonMatch = contentText.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) {
+    throw new Error('No JSON object found in Bedrock response');
   }
+
+  const parsed = JSON.parse(jsonMatch[0]) as AnalysisResult;
+  return {
+    item: parsed.item || 'Identified Item',
+    category: parsed.category || 'Waste',
+    confidence: typeof parsed.confidence === 'number' ? parsed.confidence : 0.9,
+    recommendedAction: parsed.recommendedAction || 'Recycle',
+    actionId: parsed.actionId || 'bottle'
+  };
 }
