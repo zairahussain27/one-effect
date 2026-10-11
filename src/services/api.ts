@@ -1,11 +1,11 @@
 import type { ScanResult } from '../types';
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL || import.meta.env.VITE_AWS_API_URL || '') as string;
+const API_BASE_URL = ((import.meta.env.VITE_API_URL || import.meta.env.VITE_AWS_API_URL || '') as string).replace(/\/$/, '');
 const TIMEOUT_MS = 4500;
 
 export async function fetchHealth(): Promise<{ status: string; timestamp: string }> {
   if (!API_BASE_URL) {
-    return { status: 'mock', timestamp: new Date().toISOString() };
+    throw new Error('VITE_API_URL is not configured');
   }
 
   const controller = new AbortController();
@@ -21,13 +21,13 @@ export async function fetchHealth(): Promise<{ status: string; timestamp: string
     return await res.json();
   } catch (err) {
     clearTimeout(timeoutId);
-    return { status: 'fallback', timestamp: new Date().toISOString() };
+    throw err;
   }
 }
 
 export async function sendImageToBackend(file: File): Promise<ScanResult> {
   if (!API_BASE_URL) {
-    throw new Error('No backend API URL configured');
+    throw new Error('VITE_API_URL is not configured');
   }
 
   const controller = new AbortController();
@@ -64,7 +64,7 @@ export async function sendImageToBackend(file: File): Promise<ScanResult> {
       recommendedAction: r.recommendedAction || 'Recycle',
       actionId: r.actionId || (r.category?.toLowerCase() === 'water' ? 'save-water' : r.category?.toLowerCase() === 'energy' ? 'save-energy' : r.category?.toLowerCase() === 'transport' ? 'low-carbon-trip' : r.category?.toLowerCase() === 'nature' ? 'protect-green-space' : 'recycle-bottle'),
       verified: true,
-      source: data.source === 'aws' ? 'aws' : 'fallback',
+      source: 'aws',
       rawResponse: data
     };
   } catch (error) {
