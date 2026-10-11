@@ -222,7 +222,7 @@ export interface ScanResult {
   recommendedAction: string;
   actionId: string;
   verified: boolean;
-  source: 'mock' | 'aws' | 'demo' | 'fallback';
+  source: 'aws';
   rawResponse?: unknown;
 }
 
