@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { PROBLEM_STEPS } from '../data/demoImpact';
+import { PROBLEM_STEPS } from '../data/impactFactors';
 export default function ProblemSection() {
   return (
     <section id="problem" className="section wrap">
