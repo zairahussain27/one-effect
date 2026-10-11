@@ -214,7 +214,6 @@ export const AnalysisScreen: React.FC<AnalysisScreenProps> = ({
           <AWSStatus
             message={awsMessage}
             isComplete={isFinished}
-            isFallback={analysisResult?.source === 'fallback' || analysisResult?.source === 'demo'}
           />
         </div>
       </div>
