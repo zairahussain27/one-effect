@@ -8,7 +8,7 @@ export interface AnalysisResult {
 
 export interface ApiResponse<T = unknown> {
   success: boolean;
-  source: 'aws' | 'fallback';
+  source: 'aws';
   result: T;
   s3Url?: string;
   message?: string;
