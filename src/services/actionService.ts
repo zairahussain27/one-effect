@@ -7,8 +7,7 @@ import type {
 const STORAGE_KEY_CONTRIBUTIONS = 'one_effect_contributions_v2';
 const STORAGE_KEY_HISTORY_LEGACY = 'one_effect_user_history';
 
-// ─── Demo seed data ───────────────────────────────────────────────────────────
-// Represents a realistic user who has been using the app for a month
+// Kept as an empty migration placeholder for older local-storage data.
 export const INITIAL_DEMO_CONTRIBUTIONS: EnvironmentalContribution[] = [
   // Recycling — PET bottles
   ...Array.from({ length: 8 }, (_, i) => ({
@@ -235,11 +234,9 @@ export async function getUserContributions(userId?: string): Promise<Environment
       const parsed = JSON.parse(raw) as EnvironmentalContribution[];
       return parsed.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     }
-    // Seed with demo data on first load
-    localStorage.setItem(STORAGE_KEY_CONTRIBUTIONS, JSON.stringify(INITIAL_DEMO_CONTRIBUTIONS));
-    return INITIAL_DEMO_CONTRIBUTIONS;
+    return [];
   } catch {
-    return INITIAL_DEMO_CONTRIBUTIONS;
+    return [];
   }
 }
 
@@ -410,8 +407,8 @@ export function computeStatsFromHistory(history: UserActionRecord[]): UserStats 
   return basicStats;
 }
 
-// ─── Community mock data ──────────────────────────────────────────────────────
-// Simulates aggregated community contributions for the community dashboard
+// Community aggregation contract. Replace the local implementation with the
+// authenticated aggregation endpoint when community data is enabled.
 
 export interface CommunityStats {
   contributorCount: number;
@@ -433,26 +430,22 @@ export interface CommunityStats {
 }
 
 export function getCommunityStats(userStats: UserStats): CommunityStats {
-  // Simulated community data — in production, this would come from an aggregation API
-  // that provides city-level anonymized totals
-  const multiplier = 128; // 128 community members
-
   return {
-    contributorCount: multiplier,
-    totalWasteDivertedKg: parseFloat((userStats.totalWasteDivertedKg * multiplier * 0.7 + 480).toFixed(1)),
-    totalWaterSavedL: parseFloat((userStats.totalWaterSavedL * multiplier * 0.7 + 12400).toFixed(0)),
-    totalEnergySavedKwh: parseFloat((userStats.totalEnergySavedKwh * multiplier * 0.7 + 1840).toFixed(1)),
-    totalCo2eAvoidedKg: parseFloat((userStats.totalCo2eAvoidedKg * multiplier * 0.7 + 340).toFixed(2)),
-    totalDistanceShiftedKm: parseFloat((userStats.totalDistanceShiftedKm * multiplier * 0.7 + 1240).toFixed(0)),
-    totalTreesPlanted: Math.round(userStats.totalTreesPlanted * multiplier * 0.5 + 42),
-    totalAreaRestoredM2: parseFloat((userStats.totalAreaRestoredM2 * multiplier * 0.5 + 280).toFixed(0)),
+    contributorCount: userStats.totalActions > 0 ? 1 : 0,
+    totalWasteDivertedKg: userStats.totalWasteDivertedKg,
+    totalWaterSavedL: userStats.totalWaterSavedL,
+    totalEnergySavedKwh: userStats.totalEnergySavedKwh,
+    totalCo2eAvoidedKg: userStats.totalCo2eAvoidedKg,
+    totalDistanceShiftedKm: userStats.totalDistanceShiftedKm,
+    totalTreesPlanted: userStats.totalTreesPlanted,
+    totalAreaRestoredM2: userStats.totalAreaRestoredM2,
     thisWeek: {
-      wasteDivertedKg: 42.8,
-      waterSavedL: 1840,
-      energySavedKwh: 218,
-      co2eAvoidedKg: 38.6,
-      distanceShiftedKm: 342,
-      treesPlanted: 4
+      wasteDivertedKg: userStats.totalWasteDivertedKg,
+      waterSavedL: userStats.totalWaterSavedL,
+      energySavedKwh: userStats.totalEnergySavedKwh,
+      co2eAvoidedKg: userStats.totalCo2eAvoidedKg,
+      distanceShiftedKm: userStats.totalDistanceShiftedKm,
+      treesPlanted: userStats.totalTreesPlanted
     }
   };
 }
