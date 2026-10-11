@@ -4,13 +4,11 @@ import { motion } from 'framer-motion';
 interface AWSStatusProps {
   message?: string;
   isComplete?: boolean;
-  isFallback?: boolean;
 }
 
 export const AWSStatus: React.FC<AWSStatusProps> = ({
   message = 'Amazon Bedrock is processing image...',
-  isComplete = false,
-  isFallback = false
+  isComplete = false
 }) => {
   return (
     <motion.div
@@ -24,7 +22,7 @@ export const AWSStatus: React.FC<AWSStatusProps> = ({
         <span className="aws-divider">•</span>
         <span className="aws-model">Bedrock Vision</span>
 
-        {!isComplete && !isFallback && (
+        {!isComplete && (
           <span className="aws-pulse-dot" />
         )}
 
@@ -32,9 +30,6 @@ export const AWSStatus: React.FC<AWSStatusProps> = ({
           <span className="aws-check-icon">✓</span>
         )}
 
-        {isFallback && (
-          <span className="aws-demo-tag">DEMO</span>
-        )}
       </div>
 
       <p className="aws-status-message">
