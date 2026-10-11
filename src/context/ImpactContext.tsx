@@ -275,7 +275,7 @@ export const ImpactProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   // ── Save contribution ─────────────────────────────────────────────────────
-  const saveCurrentActionToJourney = async (userId = 'demo_user'): Promise<UserActionRecord | null> => {
+  const saveCurrentActionToJourney = async (userId = 'anonymous'): Promise<UserActionRecord | null> => {
     if (isCurrentActionSaved) return null;
 
     const action = selectedAction;
