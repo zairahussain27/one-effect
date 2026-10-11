@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Scene } from './ImpactVisualization';
-import { COMMUNITY_STAGES } from '../data/demoImpact';
+import { COMMUNITY_STAGES } from '../data/impactFactors';
 const COUNTS = [1, 3, 7, 14, 24];
 export default function CommunityEffect() {
   return (
