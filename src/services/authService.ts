@@ -1,18 +1,6 @@
 import type { User } from '../types';
 
-const DEMO_MODE = import.meta.env.VITE_DEMO_MODE !== 'false';
-const USE_AWS = import.meta.env.VITE_USE_AWS === 'true';
-
 const STORAGE_KEY_USER = 'one_effect_auth_user';
-
-export const DEFAULT_DEMO_USER: User = {
-  id: 'user_zaira_01',
-  name: 'Zaira',
-  firstName: 'Zaira',
-  email: 'demo@oneeffect.app',
-  avatar: '🌱',
-  createdAt: '2026-09-15T08:00:00.000Z'
-};
 
 export async function getCurrentUser(): Promise<User | null> {
   try {
@@ -20,14 +8,9 @@ export async function getCurrentUser(): Promise<User | null> {
     if (raw) {
       return JSON.parse(raw) as User;
     }
-    // Default logged in user in demo mode
-    if (DEMO_MODE || !USE_AWS) {
-      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(DEFAULT_DEMO_USER));
-      return DEFAULT_DEMO_USER;
-    }
     return null;
   } catch {
-    return DEFAULT_DEMO_USER;
+    return null;
   }
 }
 
