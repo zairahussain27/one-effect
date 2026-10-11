@@ -5,7 +5,7 @@ import { analyzeImageWithBedrock } from '../services/bedrock';
 import type { ApiResponse, AnalysisResult } from '../types';
 
 const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': process.env.ALLOWED_ORIGIN || '*',
   'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Requested-With',
   'Access-Control-Allow-Methods': 'OPTIONS,POST',
   'Content-Type': 'application/json'
