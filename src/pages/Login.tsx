@@ -7,8 +7,8 @@ import Background from '../components/Background';
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [email, setEmail] = useState('demo@oneeffect.app');
-  const [password, setPassword] = useState('demo1234');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,16 +21,6 @@ export default function Login() {
       navigate('/dashboard');
     } catch (err: any) {
       setError(err?.message || 'Login failed. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleQuickDemo = async () => {
-    setIsSubmitting(true);
-    try {
-      await login('demo@oneeffect.app', 'demo1234');
-      navigate('/dashboard');
     } finally {
       setIsSubmitting(false);
     }
@@ -86,15 +76,6 @@ export default function Login() {
             {isSubmitting ? 'Signing in...' : 'Sign In'}
           </button>
 
-          <button
-            type="button"
-            className="btn btn-ghost btn-block"
-            style={{ marginTop: 8 }}
-            onClick={handleQuickDemo}
-            disabled={isSubmitting}
-          >
-            ⚡ One-Click Demo Mode (Zaira)
-          </button>
         </form>
 
         <div className="auth-footer">
