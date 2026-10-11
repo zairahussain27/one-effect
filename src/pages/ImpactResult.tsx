@@ -162,7 +162,7 @@ export default function ImpactResult() {
     }
     setSaving(true);
     try {
-      await saveCurrentActionToJourney(user?.id || 'demo_user');
+      await saveCurrentActionToJourney(user?.id || 'anonymous');
       setJustSaved(true);
     } finally {
       setSaving(false);
