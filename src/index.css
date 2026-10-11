@@ -904,13 +904,6 @@ input[type=range]::-moz-range-thumb {
   color:var(--green);
   font-weight:800;
 }
-.aws-demo-tag{
-  background:rgba(31,77,54,.15);
-  color:var(--forest);
-  padding:1px 5px;
-  border-radius:4px;
-  font-size:.6rem;
-}
 .aws-status-message{
   font-size:.75rem;
   color:#4a574f;
