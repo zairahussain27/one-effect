@@ -1,0 +1,21 @@
+{
+  "name": "one-effect-backend",
+  "version": "1.0.0",
+  "description": "Serverless AWS Lambda backend for ONE EFFECT image analysis and S3 storage",
+  "main": "dist/handlers/analyze.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.600.0",
+    "@aws-sdk/client-s3": "^3.600.0",
+    "busboy": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.140",
+    "@types/busboy": "^1.5.4",
+    "@types/node": "^20.14.0",
+    "typescript": "^5.5.4"
+  }
+}
